@@ -1,4 +1,7 @@
 params:
+  locale: "en-us"
+  title: "Tim Tso"
+  copyright: "Timothy Tso"
   author:
     name: "Timothy Tso"
     bio:
