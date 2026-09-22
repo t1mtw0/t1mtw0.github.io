@@ -1,0 +1,21 @@
+defaultContentLanguage: "en"
+baseURL: "https://t1mtw0.github.io/"
+enableRobotsTXT: true
+enableGitInfo: true
+paginate: 15
+summaryLength: 0
+enableEmoji: true
+
+outputs:
+  home: ["HTML", "searchindex"]
+
+outputFormats:
+  searchindex:
+    mediaType: "application/json"
+    baseName: "index"
+    isPlainText: true
+    notAlternative: true
+
+module:
+  imports:
+    - path: "github.com/omegion/hugo-omegion"
