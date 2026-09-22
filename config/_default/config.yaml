@@ -19,3 +19,26 @@ outputFormats:
 module:
   imports:
     - path: "github.com/omegion/hugo-omegion"
+
+params:
+  author:
+    name: "Timothy Tso"
+    bio:
+      - "I studied Physics/Computer Science at USC. I'm also interested in and study a lot of mathematics."
+    links:
+      - name: "GitHub"
+        url: "https://github.com/t1mtw0"
+        icon: "github"
+      - name: "LinkedIn"
+        url: "https://linkedin.com/in/t1mtw0"
+        icon: "linkedin"
+  description: "Timothy Tso's Personal Website"
+  dateFormat: "2 January 2006"
+  enableSearch: true
+  enableTableOfContents: true
+  homepage:
+    writingCount: 6
+    workCount: 4
+  search:
+    recentPostsCount: 3
+    recentProjectsCount: 3
