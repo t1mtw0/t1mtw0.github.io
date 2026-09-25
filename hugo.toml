@@ -1,3 +1,14 @@
 baseURL = 'https://t1mtw0.github.io/'
 locale = 'en-us'
 title = 'Tim Tso'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]'], ['$$', '$$']]
+          inline = [['$', '$']]
+[params]
+  math = true
