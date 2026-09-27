@@ -81,7 +81,7 @@ The idea is to construct a tree for each set where the root of the tree is the p
 
 The naive implementation is slow in the worst case (details will not be provided here). Thus we implement two optimizations: path compression and union by rank/size. Path compression relies on the following simple observation: when we traverse upwards when finding the parent, we also find the parent for all elements along the way. Thus, in path compression, we attach every element along the way directly to the parent. For union by rank/size, we rely on the again simple observation that we want to attach the "smaller" tree to the "larger" tree when combining. Thus we need a metric: two simple ones are size (number of elements in tree) or rank (depth of the tree). Both work equally well.
 
-The full implementation in C++ is found below:
+The full implementation in C++ for union by rank is found below:
 
 ```cpp
 struct Node
@@ -124,3 +124,7 @@ void union_sets(Node *a, Node *b)
     }
 }
 ```
+
+## Manacher's algorithm
+
+[Manacher's algorithm](https://en.wikipedia.org/wiki/Longest_palindromic_substring#Manacher's_algorithm) is used to solve the [Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/description/) problem in $O(n)$ time. The traditional DP solution is $O(n^2)$, but by being clever we can actually achieve $O(n)$.
