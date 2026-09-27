@@ -2,7 +2,7 @@
 title: "Data Structures and Algorithms"
 date: 2026-09-24
 summary: "Data Structures and Algorithms Notes"
-tags: ["dsa"]
+tags: ["DSA"]
 ---
 
 ## Fenwick Trees
