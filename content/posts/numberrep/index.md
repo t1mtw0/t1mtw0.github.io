@@ -15,7 +15,7 @@ The traditional implementation is one's-complement: here we have $0$ to $2^{k-1}
 
 ## Floating-Point Representations
 
-We detail the IEEE standard here. In this standard we have three parts: $s$, consisting of one bit, $E$, the exponent, consisting of 8 bits for single-precision and 11 bits for double-precision, and finally, $f$, consisting of 23 bits for single-precision and 52 bits for double-precision. From here on out we assume singl-precision: double-precision can be done similarly.
+We detail the IEEE standard here. In this standard we have three parts: $s$, consisting of one bit, $E$, the exponent, consisting of 8 bits for single-precision and 11 bits for double-precision, and finally, $f$, consisting of 23 bits for single-precision and 52 bits for double-precision. From here on out we assume single-precision: double-precision can be done similarly.
 
 ### Normalized values
 
