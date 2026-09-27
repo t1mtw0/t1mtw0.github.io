@@ -7,7 +7,7 @@ tags: ["Computer Systems"]
 
 ## Unsigned Representations
 
-This is simply traditional binary representations: $(b_n \ldots b_2b_1)_2 = (\sum_{i=1}^{n}{2^{b_i}})$.
+This is simply traditional binary representations: $(b_{n-1} \ldots b_1b_0)_2 = \sum_{i=1}^{n}{2^{b_i}}$.
 
 ## Signed Representations
 
