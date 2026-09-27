@@ -11,7 +11,7 @@ This is simply traditional binary representations: $(b_{n-1} \ldots b_1b_0)_2 = 
 
 ## Signed Representations
 
-The traditional implementation is one's-complement: here we have $0$ to $2^{k-1} - 1$ equal to the standard unsigned representations, then loop back from $-(2^{k-1} - 1)$ back all the way to $-0$. In this representation $-0$ and $-0$ are technically different.
+The traditional implementation is one's-complement: here we have $0$ to $2^{k-1} - 1$ equal to the standard unsigned representations, then loop back from $-(2^{k-1} - 1)$ back all the way to $-0$. In this representation $0$ and $-0$ are technically different.
 
 ## Floating-Point Representations
 
