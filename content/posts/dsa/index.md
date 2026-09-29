@@ -128,3 +128,84 @@ void union_sets(Node *a, Node *b)
 ## Manacher's algorithm
 
 [Manacher's algorithm](https://en.wikipedia.org/wiki/Longest_palindromic_substring#Manacher's_algorithm) is used to solve the [Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/description/) problem in $O(n)$ time. The traditional DP solution is $O(n^2)$, but by being clever we can actually achieve $O(n)$.
+
+## Breadth-First Search
+
+Breadth-first search is a graph traversal method that explores closer vertices first. A simple implementation is below:
+
+```cpp
+void bfs(std::vector<std::vector<int>>& adj, int s, int n) {
+    std::vector<bool> v(n,0);
+    std::queue<int> q;
+    q.push(s);
+    v[s] = true;
+    while (!q.empty()) {
+        int n = q.front();
+        q.pop();
+        for (int u : adj[n]) {
+            if (!v[u]) {
+                v[n] = true;
+                q.push(u);
+            }
+        }
+    }
+}
+```
+
+## Depth-First Search
+
+Depth-first search is a graph traversal method that explores farthest vertices first. A simple implementation is below:
+
+```cpp
+void dfs(std::vector<std::vector<int>>& adj, int s, int n) {
+    std::vector<bool> v(n,0);
+    for (int u = 0; u < n; ++u) {
+        if (!v[u]) {
+            dfsrec(u, adj, v);
+        }
+    }
+}
+
+void dfsrec(int u, std::vector<std::vector<int>>& adj, std::vector<bool>& v) {
+    v[u] = true;
+    for (int n : adj[u]) {
+        if (!v[n]) {
+            dfsrec(n, adj, v);
+        }
+    }
+}
+```
+
+## Dijkstra
+
+Suppose we have a graph (undirected or directed) with positive weights associated with every edge that we call the cost of that edge. Dijkstra's algorithm finds the shortest-path between a starting node denoted $s$ and any other node in the graph, where by shortest path we mean a path in the graph such that the sum of all the edges of the path is minimized.
+
+The implementation is as follows:
+
+```cpp
+void dijkstras(std::vector<std::vector<std::pair<int,int>>>& adj, int n, int s) {
+    std::vector<int> dist(n,INT_MAX);
+    std::vector<int> par(n,0);
+    std::priority_queue<std::pair<int,int>, std::vector<std::pair<int,int>>, std::greater<std::pair<int,int>>> pq;
+    pq.push({0,s});
+    while (!pq.empty()) {
+        auto [d,n] = pq.top();
+        pq.pop();
+        if (d <= dist[n]) {
+            for (auto& u : adj[n]) {
+                int on = u.first;
+                int w = u.second;
+                if (d + w < dist[on]) {
+                    dist[on] = d + w;
+                    par[on] = n;
+                    pq.push({dist[on], on});
+                }
+            }
+        }
+    }
+}
+```
+
+## Bellman-Ford
+
+Now suppose we have a directed graph. Bellman-Ford again finds the shortest-path, but allows negative weights. Note that Dijkstra is not suited for this purpose because it would run infinitely (any negative-weight cycle would cause nodes to keep getting added to the priority queue). Bellman-Ford is able to sidestep this, though at a performance cost.
