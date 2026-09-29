@@ -209,3 +209,50 @@ void dijkstras(std::vector<std::vector<std::pair<int,int>>>& adj, int n, int s) 
 ## Bellman-Ford
 
 Now suppose we have a directed graph. Bellman-Ford again finds the shortest-path, but allows negative weights. Note that Dijkstra is not suited for this purpose because it would run infinitely (any negative-weight cycle would cause nodes to keep getting added to the priority queue). Bellman-Ford is able to sidestep this, though at a performance cost.
+
+The implementation is as follows:
+
+```cpp
+struct Edge {
+    int from;
+    int to;
+    int cost;
+};
+
+void bellmanford(std::vector<Edge>& edges, int s, int n) {
+    std::vector<int> dist(n,INT_MAX);
+    std::vector<int> p(n,-1);
+    dist[s] = 0;
+    int x;
+    for (int i = 0; i < n; ++i) {
+        x = -1;
+        for (Edge e : edges) {
+            if (dist[e.from] < INT_MAX) {
+                if (dist[e.to] > dist[e.from] + e.cost) {
+                    dist[e.to] = std::max(INT_MIN, dist[e.from] + e.cost);
+                    p[e.to] = e.from;
+                    x = e.to;
+                }
+            }
+        }
+    }
+    if (x == -1) {
+        std::cout << "No negative cycle\n";
+    } else {
+        int y = x;
+        for (int i = 0; i < n; ++i)
+            y = p[y];
+        std::vector<int> path;
+        for (int c = y;; c = p[c]) {
+            path.push_back(c);
+            if (c == y && path.size() > 1)
+                break;
+        }
+        std::reverse(path.begin(), path.end());
+        std::cout << "Negative cycle: ";
+        for (int u : path)
+            std::cout << u << " ";
+        std::cout << "\n";
+    }
+}
+```
