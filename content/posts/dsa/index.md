@@ -14,8 +14,6 @@ Fenwick Trees are a data structure for computing a group operation on an array $
 
  This allows us to calculate the sum of any interval in an array in $O(\log{N})$ time, while allowing us to update values as we please.
 
-Below is the complete implementation (in C++).
-
 ```cpp
 class FenwickTree
 {
@@ -80,8 +78,6 @@ Each one of these operations can be accomplished in essentially $O(1)$ time (thi
 The idea is to construct a tree for each set where the root of the tree is the parent element. To combine sets we attach one of the trees to the other, choosing arbitrarily one of the parent elements to be the new combined parent. To find the parent of an element, we simply traverse the tree upwards until we reach the root.
 
 The naive implementation is slow in the worst case (details will not be provided here). Thus we implement two optimizations: path compression and union by rank/size. Path compression relies on the following simple observation: when we traverse upwards when finding the parent, we also find the parent for all elements along the way. Thus, in path compression, we attach every element along the way directly to the parent. For union by rank/size, we rely on the again simple observation that we want to attach the "smaller" tree to the "larger" tree when combining. Thus we need a metric: two simple ones are size (number of elements in tree) or rank (depth of the tree). Both work equally well.
-
-The full implementation in C++ for union by rank is found below:
 
 ```cpp
 struct Node
@@ -180,8 +176,6 @@ void dfsrec(int u, std::vector<std::vector<int>>& adj, std::vector<bool>& v) {
 
 Suppose we have a graph (undirected or directed) with positive weights associated with every edge that we call the cost of that edge. Dijkstra's algorithm finds the shortest-path between a starting node denoted $s$ and any other node in the graph, where by shortest path we mean a path in the graph such that the sum of all the edges of the path is minimized.
 
-The implementation is as follows:
-
 ```cpp
 void dijkstras(std::vector<std::vector<std::pair<int,int>>>& adj, int n, int s) {
     std::vector<int> dist(n,INT_MAX);
@@ -209,8 +203,6 @@ void dijkstras(std::vector<std::vector<std::pair<int,int>>>& adj, int n, int s) 
 ## Bellman-Ford
 
 Now suppose we have a directed graph. Bellman-Ford again finds the shortest-path, but allows negative weights. Note that Dijkstra is not suited for this purpose because it would run infinitely (any negative-weight cycle would cause nodes to keep getting added to the priority queue). Bellman-Ford is able to sidestep this, though at a performance cost.
-
-The implementation is as follows:
 
 ```cpp
 struct Edge {
@@ -256,3 +248,47 @@ void bellmanford(std::vector<Edge>& edges, int s, int n) {
     }
 }
 ```
+
+## Bipartite
+
+We are given an undirected graph. Our task is to find out whether or not the graph is bipartite: i.e. whether we can partition the graph into two sets of vertices such that there are no edges between any two vertices in the same partition.
+
+```cpp
+bool bipartite(std::vector<std::vector<int>>& adj) {
+    int n = adj.size();
+    bool b;
+    std::vector<int> s(n,-1);
+    std::queue<int> q;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == -1) {
+            q.push(i);
+            s[i] = 0;
+            while (!q.empty()) {
+                int n = q.front();
+                q.pop();
+                for (int u : adj[n]) {
+                    if (s[u] == -1) {
+                        s[u] = s[n] ^ 1;
+                        q.push(u);
+                    } else {
+                        b &= s[u] != s[n];
+                    }
+                }
+            }
+        }
+    }
+    return b;
+}
+```
+
+## Kruskal
+
+Kruskal's algorithm is an algorithm to find a [Minimum Spanning Tree(MST)](https://en.wikipedia.org/wiki/Minimum_spanning_tree).
+
+## Ford-Fulkerson
+
+## Floyd-Warshall
+
+Floyd-Warshall is an algorithm for finding the shortest path in a (directed or undirected) graph that allows negative weights but no negative weight cycles in $O(n^3)$ time.
+
+## Kuhn
