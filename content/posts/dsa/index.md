@@ -285,10 +285,86 @@ bool bipartite(std::vector<std::vector<int>>& adj) {
 
 Kruskal's algorithm is an algorithm to find a [Minimum Spanning Tree(MST)](https://en.wikipedia.org/wiki/Minimum_spanning_tree).
 
-## Ford-Fulkerson
-
 ## Floyd-Warshall
 
 Floyd-Warshall is an algorithm for finding the shortest path in a (directed or undirected) graph that allows negative weights but no negative weight cycles in $O(n^3)$ time.
 
 ## Kuhn
+
+Kuhn's algorithm finds the maximum bipartite matching for a bipartite graph $G$. A matching of a bipartite graph is a set of edges that are non-adjacent, that is only one edge is incident on a vertex for all vertices. Our task is to find the maximum matching, that is, the matching that contains the largest number of edges. Note that there is also a notion of a maximal matching that is defined as a matching that is not properly contained in another matching. A maximum matching is easily seen to be maximal, but the other direction is not true.
+
+The key definition to find this maximum matching is that of an augmenting path. An augmenting path is an alternating path (i.e. each edge sends a vertex from one side to the other side in a bipartite graph) such that the beginning and ending are unsaturated, that is they do not already belong in the matching. It can be shown that if there exists no augmenting path then the matching is maximum (note that it is maximum, not just maximal).
+
+```cpp
+bool rec(int n, vector<vector<int>>& g, vector<bool>& v, vector<int>& m) {
+    if (v[n])
+        return false;
+    v[n] = true;
+    for (int u : g[n]) {
+        if (m[u] == -1 || rec(u,g,v,m)) {
+            m[u] = n;
+            return true;
+        }
+    }
+    return false;
+}
+
+void kuhn(int N, int K, vector<vector<int>>& g) {
+    vector<int> m(K,-1);
+    vector<bool> v;
+    for (int i = 0; i < N; ++i) {
+        v.assign(N,false);
+        rec(i,g,v,m);
+    }
+}
+```
+
+We can improve the above approach by the following: before we try and find any augmenting path, simply loop through the set of N vertices on one side and try and assign them to another vertex on the other side. This will create an initial matching that will not in general be maximum before we run the main algorithm, but will in general by faster than simply running Kuhn from the start.
+
+## Ford-Fulkerson/Edmonds-Karp
+
+Ford-Fulkerson is a general method for determining the maximum flow in a flow network. A flow network can be roughly thought of as a directed graph with a flow function associated with each edge representing the capacity of that edge. A flow through this network is again a function from the edges of this graph to a number such that the inflow equals the outflow for every vertex except for two distinguished vertices, the source and the target, where flow must come out of the source and flow must go into the target.
+
+We first define what is known as the residual network that represents the residual capacity given some flow. For example, the residual capacity of a flow with 0 for every edge is simply the flow network itself. We additionally define a residual network for every reversed edge as well, defined as the flow we can take back. For example, if an edge has flow 5 from vertex $u$ to $v$, the residual network from $v$ to $u$ is 5, since we can take back 5 flow along this edge.
+
+Ford-Fulkerson finds the augmenting path by means of an augmenting path. Using our definition of a residual network, an augmenting path is simply a path from $s$ to $t$ such that every edge has the same flow along it. Notice that in our residual network there are actually two directed edges between any two vertices, so we can travel forwards or backwards.
+
+```cpp
+int bfs(int s, int t, vector<int>& p, vector<vector<int>>& g, vector<vector<int>>& cap) {
+    fill(p.begin(),p.end());
+    p[s] = -2;
+    queue<pair<int,int>> q;
+    q.push({s,INT_MAX});
+    while (!q.empty()) {
+        auto [n,f] = q.front();
+        q.pop();
+        for (int u : g[n]) {
+            if (p[u] == -1 && cap[n][u]) {
+                p[u] = n;
+                int nf = min(f,cap[n][u]);
+                if (u == t)
+                    return nf;
+                q.push({u,nf});
+            }
+        }
+    }
+    return 0;
+}
+
+int fordfulkerson(int N, vector<vector<int>>& g, vector<vector<int>>& cap, int s, int t) {
+    int f = 0;
+    int nf;
+    vector<int> p;
+    while (nf = bfs(s,t,p,g,cap)) {
+        f += nf;
+        int c = t;
+        while (c != s) {
+            int pv = p[c];
+            cap[pv][c] -= nf;
+            cap[c][pv] += nf;
+            c = pv;
+        }
+    }
+    return f;
+}
+```
