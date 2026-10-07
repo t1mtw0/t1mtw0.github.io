@@ -80,43 +80,38 @@ The idea is to construct a tree for each set where the root of the tree is the p
 The naive implementation is slow in the worst case (details will not be provided here). Thus we implement two optimizations: path compression and union by rank/size. Path compression relies on the following simple observation: when we traverse upwards when finding the parent, we also find the parent for all elements along the way. Thus, in path compression, we attach every element along the way directly to the parent. For union by rank/size, we rely on the again simple observation that we want to attach the "smaller" tree to the "larger" tree when combining. Thus we need a metric: two simple ones are size (number of elements in tree) or rank (depth of the tree). Both work equally well.
 
 ```cpp
-struct Node
-{
-    int value;
-    int rank;
-    Node *parent;
-
-    Node(int v) : value{v}, rank{0}, parent{nullptr} {};
-};
-
-void make_set(Node *v)
-{
-    v->parent = v;
-    v->rank = 0;
-}
-
-Node *find_set(Node *v)
-{
-    if (v->parent == v)
-        return v;
-    return v->parent = find_set(v->parent);
-}
-
-void union_sets(Node *a, Node *b)
-{
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b)
-    {
-        if (a->rank < b->rank)
-        {
-            auto temp = a;
-            a = b;
-            b = temp;
+class DSU {
+private:
+    int N;
+    std::vector<int> rep;
+    std::vector<int> sz;
+public:
+    DSU(int n) {
+        N = n;
+        for (int i = 0; i < n; ++i) {
+            sz.push_back(1);
+            rep.push_back(i);
         }
-        b->parent = a;
-        if (b->rank == a->rank)
-            a->rank++;
+    }
+    int fnd(int a) {
+        if (rep[a] == a)
+            return a;
+        return rep[a] = fnd(rep[a]);
+    }
+    bool dounion(int a, int b) {
+        a = find(a);
+        b = find(b);
+        if (a == b)
+            return false;
+        if (sz[a] > sz[b]) {
+            rep[b] = rep[a];
+            sz[a] += sz[b];
+        } else {
+            rep[a] = rep[b];
+            sz[b] += sz[a];
+        }
+        N--;
+        return true;
     }
 }
 ```
@@ -367,4 +362,75 @@ int fordfulkerson(int N, vector<vector<int>>& g, vector<vector<int>>& cap, int s
     }
     return f;
 }
+```
+
+## String Hashing
+
+We want to compare strings efficiently. We do this by hashing the strings into integers and comparing the integers instead. The idea is as follows:
+
+\[ h(s) = \sum_{i=0}^{n-1}{s[i] \cdot p^i}  \qquad \mathrm{mod m}\]
+
+```cpp
+long long h(string const& s) {
+    const int p = 31;
+    const int m = 1e9 + 9;
+    long long v = 0;
+    long long pp = 1;
+    for (char c : s) {
+        v = (v + (c-'a'+1) * pp) % m;
+        pp = (pp*p) % m;
+    }
+    return v;
+}
+```
+
+## Robin-Karp
+
+## Trie
+
+A Trie (or prefix tree) is a string data structure used to store a dictionary of strings. It allows for fast generation of autocomplete lists.
+
+```cpp
+class TrieNode {
+public:
+    TrieNode *child[26];
+    bool isWord;
+    TrieNode() {
+        for (auto& a : child)
+            a = nullptr;
+        isWord = false;
+    }
+};
+class Trie {
+    TrieNode* root;
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+    bool search(string key, bool prefix = false) {
+        TrieNode* p = root;
+        for (auto& c : key) {
+            int i = c-'a';
+            if (!p->child[i])
+                return false;
+            p = p->child[i];
+        }
+        if (!prefix)
+            return p->isWord;
+        return true;
+    }
+    void insert(std::string s) {
+        TrieNode* p = root;
+        for (auto& c : s) {
+            int i = c-'a';
+            if (!p->child[i])
+                p->child[i] = new TrieNode();
+            p = p->child[i];
+        }
+        p->isWord = true;
+    }
+    bool startsWith(string prefix) {
+        return search(prefix,true);
+    }
+};
 ```
