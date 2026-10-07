@@ -386,6 +386,8 @@ long long h(string const& s) {
 
 ## Robin-Karp
 
+Robin-Karp finds all occurrences of a pattern $p$ in a string $s$. We do this by exploiting string hashing: first we hash the pattern p; then, for every substring of length $|p|$ in $s$ we calculate the hash and compare it with $p$'s hash.
+
 ## Trie
 
 A Trie (or prefix tree) is a string data structure used to store a dictionary of strings. It allows for fast generation of autocomplete lists.
