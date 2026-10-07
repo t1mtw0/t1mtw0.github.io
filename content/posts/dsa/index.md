@@ -368,7 +368,7 @@ int fordfulkerson(int N, vector<vector<int>>& g, vector<vector<int>>& cap, int s
 
 We want to compare strings efficiently. We do this by hashing the strings into integers and comparing the integers instead. The idea is as follows:
 
-\[ h(s) = \sum_{i=0}^{n-1}{s[i] \cdot p^i}  \qquad \mathrm{mod m}\]
+\[ h(s) = \sum_{i=0}^{n-1}{s[i] \cdot p^i}  \qquad \mathrm{mod} \quad m\]
 
 ```cpp
 long long h(string const& s) {
