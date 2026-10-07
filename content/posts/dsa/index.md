@@ -1,6 +1,6 @@
 ---
 title: "Data Structures and Algorithms"
-date: 2026-09-29
+date: 2026-10-07
 summary: "Data Structures and Algorithms Notes"
 tags: ["DSA"]
 ---
